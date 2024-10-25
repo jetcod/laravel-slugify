@@ -1,6 +1,7 @@
 {
     "name": "jetcod/laravel-slugify",
     "description": "A Laravel package that automatically generates slugs for model attributes, simplifying the creation of URL-friendly slugs.",
+    "keywords": ["laravel", "slugify", "slug", "url", "url-friendly", "url-slug", "url-slugify", "url-slugify-laravel", "laravel-slugify"],
     "type": "library",
     "require": {
         "php": "^7.4|^8.0",
