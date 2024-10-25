@@ -5,8 +5,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "illuminate/support": "*",
-        "jetcod/data-transport": "^1.2",
-        "jetcod/laravel-model-translation": "^1.1"
+        "jetcod/data-transport": "^1.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.64",
