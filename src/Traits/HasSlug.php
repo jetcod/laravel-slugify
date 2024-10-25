@@ -33,7 +33,7 @@ trait HasSlug
             return;
         }
 
-        $this->saveSlug();
+        $this->saveSlugs();
     }
 
     protected function generateSlugOnUpdate()
@@ -44,40 +44,39 @@ trait HasSlug
             return;
         }
 
-        $this->saveSlug();
+        $this->saveSlugs();
     }
 
-    private function saveSlug(): void
+    protected function hasSluggableColumns(): bool
     {
-        if (empty($this->getSluggables())) {
-            return;
-        }
+        return !empty($this->getSluggables());
+    }
 
+    protected function saveSlugs(): void
+    {
         $slugs = $this->generateSlugsCollection();
 
         if ($slugColumn = $this->slugOptions->slugColumn) {
             $this->{$slugColumn} = $slugs;
-
-            return;
-        }
-
-        if ($lang = $this->slugOptions->slugLanguage) {
-            $this->saveTranslatedSlugsWithLanquage($slugs, $lang);
         }
     }
 
-    private function getSluggables(): array
+    protected function generateSlugsCollection(): Collection
     {
-        return property_exists($this, 'sluggables') ? $this->sluggables : [];
-    }
+        if (!$this->hasSluggableColumns()) {
+            return collect();
+        }
 
-    private function generateSlugsCollection(): Collection
-    {
         $collection = collect($this->sluggables);
 
         return $collection->combine(
             $collection->map(fn ($columnName) => $this->generateSlugString($columnName))
         );
+    }
+
+    private function getSluggables(): array
+    {
+        return property_exists($this, 'sluggables') ? $this->sluggables : [];
     }
 
     private function generateSlugString(string $attribute): string

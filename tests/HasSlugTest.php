@@ -12,16 +12,6 @@ use Jetcod\LaravelSlugify\Test\Fixtures\TestModel;
  */
 class HasSlugTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     public function testGenerateSlugsAndSaveThemIntoTheSpecifiedColumnOnCreateAndUpdate()
     {
         $testModel = new class extends TestModel {

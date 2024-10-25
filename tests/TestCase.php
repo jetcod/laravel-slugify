@@ -33,6 +33,11 @@ class TestCase extends Orchestra
         $this->setUpDatabase($this->app);
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     protected function setUpDatabase(Application $app)
     {
         Schema::create('test_model', function (Blueprint $table) {

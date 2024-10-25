@@ -7,46 +7,12 @@ use Jetcod\DataTransport\AbstractDTO;
 /**
  * @property string $slugColumn
  * @property string $slugSeparator
- * @property string $slugLanguage
  * @property int    $maximumLength
  * @property bool   $generateSlugsOnCreate
  * @property bool   $generateSlugsOnUpdate
  */
 class SlugOptions extends AbstractDTO
 {
-    /** @var array|callable */
-    public $generateSlugFrom;
-
-    /**
-     * Sets the field(s) that should be used to generate the slug.
-     *
-     * @param array|callable|string $fieldName the field name(s) to use for generating the slug
-     */
-    public function generateSlugFrom($fieldName): self
-    {
-        if (is_string($fieldName)) {
-            $fieldName = [$fieldName];
-        }
-
-        $this->generateSlugFrom = $fieldName;
-
-        return $this;
-    }
-
-    public function fromLocale(string $locale): self
-    {
-        $this->slugLanguage = \Locale::getPrimaryLanguage($locale);
-
-        return $this;
-    }
-
-    public function fromLanguage(string $language): self
-    {
-        $this->slugLanguage = $language;
-
-        return $this;
-    }
-
     /**
      * Sets the column that should be used to store the generated slug.
      *
@@ -67,19 +33,6 @@ class SlugOptions extends AbstractDTO
     public function slugShouldBeNoLongerThan(int $maximumLength): self
     {
         $this->maximumLength = $maximumLength;
-
-        return $this;
-    }
-
-    /**
-     * Allows the generation of duplicate slugs.
-     *
-     * By default, the slug generation process will ensure that each slug is unique. This method disables that behavior,
-     * allowing the generation of duplicate slugs.
-     */
-    public function allowDuplicatedSlugs(): self
-    {
-        $this->allowDuplicatedSlugs = true;
 
         return $this;
     }
@@ -112,16 +65,18 @@ class SlugOptions extends AbstractDTO
         return $this;
     }
 
+    /**
+     * Sets the separator character to be used when generating slugs.
+     *
+     * By default, the slug separator is a hyphen (-). This method allows you to customize the separator character.
+     *
+     * @param string $separator the character to use as the slug separator
+     *
+     * @return $this
+     */
     public function slugWithSeparator(string $separator): self
     {
         $this->slugSeparator = $separator;
-
-        return $this;
-    }
-
-    public function generateSlugsOnUpdate(): self
-    {
-        $this->generateSlugsOnUpdate = true;
 
         return $this;
     }
@@ -130,7 +85,6 @@ class SlugOptions extends AbstractDTO
     {
         $this->slugColumn            = null;
         $this->slugSeparator         = '-';
-        $this->slugLanguage          = 'en';
         $this->maximumLength         = 255;
         $this->generateSlugsOnCreate = true;
         $this->generateSlugsOnUpdate = true;
