@@ -6,11 +6,6 @@ use Illuminate\Support\Collection;
 use Jetcod\LaravelSlugify\SlugOptions;
 use Jetcod\LaravelSlugify\Test\Fixtures\TestModel;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 class HasSlugTest extends TestCase
 {
     public function testGenerateSlugsAndSaveThemIntoTheSpecifiedColumnOnCreateAndUpdate()
