@@ -2,6 +2,7 @@
 
 namespace Jetcod\LaravelSlugify\Test;
 
+use Illuminate\Support\Collection;
 use Jetcod\LaravelSlugify\SlugOptions;
 use Jetcod\LaravelSlugify\Test\Fixtures\TestModel;
 
@@ -124,11 +125,37 @@ class HasSlugTest extends TestCase
         $testModel->title = $this->faker->sentence(20);
         $testModel->save();
 
+        dd(json_encode($testModel->slugs));
+
         foreach ($testModel->slugs as $value) {
             $this->assertLessThanOrEqual(10, strlen($value));
             $this->assertStringEndsNotWith('_', $value);
         }
 
         $this->assertCount(2, $testModel->slugs);
+    }
+
+    public function testItGetsAccessToSlugsColumnDataAsCollectionIfItIsNotCasted()
+    {
+        $testModel = new class extends TestModel {
+            protected $sluggables = [
+                'name',
+                'title',
+            ];
+
+            protected $casts = [];
+
+            protected function getSlugConfig(): SlugOptions
+            {
+                return SlugOptions::make()->saveSlugsTo('slugs');
+            }
+        };
+        $testModel->name  = $this->faker->sentence(10);
+        $testModel->title = $this->faker->sentence(10);
+        $testModel->save();
+
+        $this->assertCount(2, $testModel->slugs);
+        $this->assertDatabaseHas('test_model', ['slugs' => json_encode($testModel->slugs)]);
+        $this->assertInstanceOf(Collection::class, $testModel->slugs);
     }
 }

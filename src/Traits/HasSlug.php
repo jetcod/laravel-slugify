@@ -83,8 +83,7 @@ trait HasSlug
     {
         $slugString = Str::slug(
             $this->{$attribute},
-            $this->slugOptions->slugSeparator,
-            $this->slugOptions->slugLanguage
+            $this->slugOptions->slugSeparator
         );
 
         if (strlen($slugString) > $this->slugOptions->maximumLength) {
