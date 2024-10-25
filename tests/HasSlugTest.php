@@ -125,8 +125,6 @@ class HasSlugTest extends TestCase
         $testModel->title = $this->faker->sentence(20);
         $testModel->save();
 
-        dd(json_encode($testModel->slugs));
-
         foreach ($testModel->slugs as $value) {
             $this->assertLessThanOrEqual(10, strlen($value));
             $this->assertStringEndsNotWith('_', $value);
