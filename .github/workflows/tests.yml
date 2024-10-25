@@ -10,10 +10,9 @@ on:
 
 jobs:
   phpunit:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         php: [7.4, 8.0, 8.1, 8.2]
         include:
           - php: "7.4"
@@ -28,8 +27,8 @@ jobs:
           - php: "8.2"
             laravel: "11.*"
             testbench: "^9.0"
-          
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
     steps:
       - name: Checkout code
@@ -46,6 +45,12 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
           coverage: none
+
+      - name: Remove Composer Lock File
+        run: |
+          if [ -f composer.lock ]; then
+            rm composer.lock
+          fi
 
       - name: Install Composer dependencies
         run: |
