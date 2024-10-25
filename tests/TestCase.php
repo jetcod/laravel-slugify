@@ -7,14 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
-use Jetcod\Laravel\Translation\Providers\TranslationServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 class TestCase extends Orchestra
 {
     use RefreshDatabase;
@@ -48,11 +42,6 @@ class TestCase extends Orchestra
             $table->string('other_field')->nullable();
             $table->string('url')->nullable();
         });
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [TranslationServiceProvider::class];
     }
 
     protected function getEnvironmentSetUp($app)
