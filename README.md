@@ -1,13 +1,22 @@
 # Laravel Slugify Package
 
+![Build](https://img.shields.io/github/actions/workflow/status/jetcod/laravel-slugify/tests.yml?style=for-the-badge)
+
+
+[![Latest Stable Version](https://img.shields.io/packagist/v/jetcod/laravel-slugify?label=Latest%20Stable%20Version)](https://packagist.org/packages/jetcod/laravel-slugify)
+[![Total Downloads](https://img.shields.io/packagist/dt/jetcod/laravel-slugify?label=Total%20Downloads)](https://packagist.org/packages/jetcod/laravel-slugify)
+[![License](https://img.shields.io/github/license/jetcod/laravel-slugify?label=License)](https://github.com/jetcod/laravel-slugify/blob/main/LICENSE)
+
+## Overview
+
 The `jetcod\laravel-slugify` package simplifies the generation and management of slugs for Eloquent models in Laravel applications. This package utilizes the `HasSlug` trait to automatically create and update slugs based on your model's attributes, with flexible configuration options.
 
 ## Installation
 
 ### Requirements
 
-- PHP ^7.4|^8.0
-- Laravel >8.0
+- PHP ^7.4 | ^8.0
+- Laravel 8.0+
 
 ### Step 1: Install via Composer
 
