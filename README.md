@@ -89,7 +89,13 @@ $post->save();
 Run your tests to verify that slugs are generated as expected:
 
 ```bash
-php artisan test
+composer test
+```
+
+Run PHPStan to check for potential issues in the code:
+
+```bash
+composer phpstan
 ```
 
 ## License
