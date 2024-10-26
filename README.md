@@ -59,18 +59,22 @@ class YourModel extends Model
 
     protected function getSlugConfig(): SlugOptions
     {
-        return SlugOptions::create();
+        return SlugOptions::create()
+            ->slugColumn('slugs')   // Define the column name where the slugs will be stored
+        ;
     }
 }
 ```
 
 ## Available Configuration Options
 
-- **generateSlugsOnCreate(bool)**: Set to true if you want to generate slugs on model creation.
-- **generateSlugsOnUpdate(bool)**: Set to true if you want to regenerate slugs when the model is updated.
+- **doNotGenerateSlugsOnCreate()**: Call this method if you want to avoid generating slugs on model creation.
+- **doNotGenerateSlugsOnUpdate()**: Call this method if you want to avoid generating slugs when the model is updated.
 - **slugColumn(string)**: Define the column name where the slugs will be stored. The defined column type should be `json`.
 - **slugSeparator(string)**: Character separator between words in the slug. (Default value is '-')
 - **maximumLength(int)**: Maximum character length of the slug.
+
+**Note**: Calling slugColumn() is required while defining the slug options.
 
 ## **Example**: Creating and Updating a Model with Slug Generation
 
