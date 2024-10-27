@@ -39,13 +39,6 @@
     "config": {
         "sort-packages": true
     },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Jetcod\\LaravelSlugify\\Providers\\SlugifyServiceProvider"
-            ]
-        }
-    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }
