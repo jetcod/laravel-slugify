@@ -73,8 +73,9 @@ class YourModel extends Model
 - **slugColumn(string)**: Define the column name where the slugs will be stored. The defined column type should be `json`.
 - **slugSeparator(string)**: Character separator between words in the slug. (Default value is '-')
 - **maximumLength(int)**: Maximum character length of the slug.
+- **avoidDuplicates()**: Call this method to generate unique slugs.
 
-**Note**: Calling slugColumn() is required while defining the slug options.
+> **Note**: Calling slugColumn() is required while defining the slug options.
 
 ## **Example**: Creating and Updating a Model with Slug Generation
 
@@ -87,6 +88,48 @@ $post->save();
 
 // $post->slugs will be like {"title":"this-is-an-example-title"} (based on the configured options)
 ```
+
+## **Example**: Generating Unique Slugs
+To ensure unique slugs, you can use the `avoidDuplicates()` method in your SlugOptions:
+
+```php
+use Jetcod\LaravelSlugify\SlugOptions;
+use Jetcod\LaravelSlugify\Traits\HasSlug;
+
+class YourModel extends Model
+{
+    use HasSlug;
+
+    protected $sluggables = ['title'];
+
+    protected function getSlugConfig(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->slugColumn('slugs')
+            ->avoidDuplicates()
+        ;
+    }
+}
+```
+
+Then when you create or update a model, the slug will be generated and saved as a unique value.
+
+```php
+$post = new Post();
+$post->title = "This is an Example Title";
+$post->save();
+
+// Result: $post->slugs will be like {"title":"this-is-an-example-title"} 
+
+// Create another post with the same title
+$post = new Post();
+$post->title = "This is an Example Title";
+$post->save();
+
+// Result: $post->slugs will be like {"title":"this-is-an-example-title-1"}
+```
+
+> **Note**: It also considers the maximum length of the slug while generating unique slug strings.
 
 ## Testing
 
