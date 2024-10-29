@@ -10,6 +10,7 @@ use Jetcod\DataTransport\AbstractDTO;
  * @property int    $maximumLength
  * @property bool   $generateSlugsOnCreate
  * @property bool   $generateSlugsOnUpdate
+ * @property bool   $unique
  */
 class SlugOptions extends AbstractDTO
 {
@@ -81,6 +82,18 @@ class SlugOptions extends AbstractDTO
         return $this;
     }
 
+    /**
+     * Enables the automatic avoidance of duplicate slugs.
+     *
+     * @return $this
+     */
+    public function avoidDuplicates(): self
+    {
+        $this->unique = true;
+
+        return $this;
+    }
+
     protected function init(): void
     {
         $this->slugColumn            = null;
@@ -88,5 +101,6 @@ class SlugOptions extends AbstractDTO
         $this->maximumLength         = 255;
         $this->generateSlugsOnCreate = true;
         $this->generateSlugsOnUpdate = true;
+        $this->unique                = false;
     }
 }
