@@ -81,6 +81,10 @@ trait HasSlug
 
     private function generateSlugString(string $attribute): string
     {
+        if (empty($this->{$attribute})) {
+            return '';
+        }
+
         $slugString = Str::slug(
             $this->{$attribute},
             $this->slugOptions->slugSeparator
@@ -90,6 +94,44 @@ trait HasSlug
             $slugString = Str::limit($slugString, $this->slugOptions->maximumLength, '');
         }
 
-        return rtrim($slugString, $this->slugOptions->slugSeparator);
+        $slugString = rtrim($slugString, ' \n\r\t\v\0' . $this->slugOptions->slugSeparator);
+
+        if ($this->slugOptions->unique) {
+            return $this->unifySlugString($slugString, $attribute);
+        }
+
+        return $slugString;
+    }
+
+    private function unifySlugString(string $slugString, string $attribute): string
+    {
+        $suffix = static::select($this->slugOptions->slugColumn)
+            ->where("{$this->slugOptions->slugColumn}", 'like', "%{$slugString}%")
+            ->get()
+            ->pluck($this->slugOptions->slugColumn)
+            ->map(function ($value) use ($attribute) {
+                $item = is_array($value) ? $value[$attribute] ?? null : json_decode($value)?->{$attribute};
+                preg_match('/' . $this->slugOptions->slugSeparator . '(\d+)$/', $item, $matches);
+
+                return (int) ($matches[1] ?? 0);
+            })->max()
+        ;
+
+        // Increment the suffix if necessary
+        $newSuffix     = is_int($suffix) ? $suffix + 1 : null;
+        $newSlugString = null !== $newSuffix
+            ? $slugString . $this->slugOptions->slugSeparator . $newSuffix
+            : $slugString;
+
+        // Check if the new slug string exceeds the maximum length and adjust if needed
+        if (strlen($newSlugString) > $this->slugOptions->maximumLength) {
+            $allowedLength = $this->slugOptions->maximumLength - strlen($this->slugOptions->slugSeparator . $newSuffix);
+            $slugString    = substr($slugString, 0, $allowedLength);
+            $slugString    = Str::limit($slugString, $allowedLength, '');
+            $newSlugString = $slugString . $this->slugOptions->slugSeparator . $newSuffix;
+        }
+
+        // If adjusted string already exists, recurse
+        return null !== $newSuffix ? $this->unifySlugString($newSlugString, $attribute) : $slugString;
     }
 }
