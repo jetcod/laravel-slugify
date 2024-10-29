@@ -128,6 +128,24 @@ class HasSlugTest extends TestCase
         $this->assertCount(2, $testModel->slugs);
     }
 
+    public function testGeneratedSlugsAreInLowercase()
+    {
+        $testModel = new class extends TestModel {
+            protected $sluggables = ['name'];
+
+            protected function getSlugConfig(): SlugOptions
+            {
+                return SlugOptions::make()
+                    ->saveSlugsTo('slugs')
+                ;
+            }
+        };
+        $testModel->name = $this->faker->sentence(10);
+        $testModel->save();
+
+        $this->assertEquals(strtolower($testModel->slugs['name']), $testModel->slugs['name']);
+    }
+
     public function testItGetsAccessToSlugsColumnDataAsCollectionIfItIsNotCasted()
     {
         $testModel = new class extends TestModel {
