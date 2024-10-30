@@ -10,4 +10,9 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">src/</directory>
+        </include>
+    </source>
 </phpunit>

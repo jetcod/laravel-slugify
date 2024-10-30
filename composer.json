@@ -34,7 +34,8 @@
     "scripts": {
         "phpcs-fix": "./vendor/bin/php-cs-fixer fix ",
         "phpstan": "./vendor/bin/phpstan analyse --memory-limit=-1 src/",
-        "test": "./vendor/bin/phpunit --testdox"
+        "test": "./vendor/bin/phpunit --testdox",
+        "coverage": "./vendor/bin/phpunit --coverage-html coverage/"
     },
     "config": {
         "sort-packages": true

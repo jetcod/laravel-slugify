@@ -139,6 +139,12 @@ Run your tests to verify that slugs are generated as expected:
 composer test
 ```
 
+Run code coverage analysis to generate a coverage report. This will generate a coverage report in the `coverage` directory.
+
+```bash
+composer coverage
+```
+
 Run PHPStan to check for potential issues in the code:
 
 ```bash
