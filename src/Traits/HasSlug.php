@@ -111,9 +111,10 @@ trait HasSlug
             ->pluck($this->slugOptions->slugColumn)
             ->map(function ($value) use ($attribute) {
                 $item = is_array($value) ? $value : json_decode($value, true);
-                if (!is_array($value) && (json_last_error() !== JSON_ERROR_NONE || !isset($item[$attribute]))) {
-                    return 0;
+                if (!isset($item[$attribute])) {
+                    return null;
                 }
+
                 preg_match('/' . $this->slugOptions->slugSeparator . '(\d+)$/', $item[$attribute], $matches);
 
                 return (int) ($matches[1] ?? 0);

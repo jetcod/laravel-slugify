@@ -329,4 +329,58 @@ class HasSlugTest extends TestCase
 
         $this->assertDatabaseCount('test_model', 10);
     }
+
+    public function testSlugsAreNotGeneratedIfNoSluggableColumns(): void
+    {
+        $model = new class extends TestModel {
+            protected $sluggables = [];
+
+            protected function getSlugConfig(): SlugOptions
+            {
+                return SlugOptions::make()
+                    ->saveSlugsTo('slugs')
+                ;
+            }
+        };
+
+        $model->title = $this->faker->sentence;
+        $model->save();
+
+        $this->assertEmpty($model->slugs);
+        $this->assertDatabaseHas('test_model', ['title' => $model->title, 'slugs' => json_encode([])]);
+    }
+
+    public function testInvalidSlugColumnDataIsIgnoredFromUniquenessCheck(): void
+    {
+        $model = new class extends TestModel {
+            protected $casts = [];
+
+            protected function getSlugConfig(): SlugOptions
+            {
+                return SlugOptions::make()
+                    ->avoidDuplicates()
+                    ->saveSlugsTo('slugs')
+                ;
+            }
+        };
+
+        // Initializing database with invalid json data
+        TestModel::factory()->create(['name' => $name = 'some text goes here', 'slugs' => $slug = 'some-text-goes-here']);  
+
+        $model->name = $name;
+        $model->save();
+
+        $this->assertDatabaseHas('test_model', ['name' => $name, 'slugs' => json_encode(['name' => $slug])]);
+        $this->assertDatabaseCount('test_model', 2);
+
+        for ($i = 1; $i < 10; ++$i) {
+            $testModel       = new $model();
+            $testModel->name = $name;
+            $testModel->save();
+
+            $this->assertEquals('some-text-goes-here-' . $i, $testModel->slugs['name']);
+        }
+
+        $this->assertDatabaseCount('test_model', 11);
+    }
 }
