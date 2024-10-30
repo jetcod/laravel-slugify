@@ -3,6 +3,7 @@
 namespace Jetcod\LaravelSlugify\Test;
 
 use Faker\Factory as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,6 +26,10 @@ class TestCase extends Orchestra
         $this->faker = Faker::create();
 
         $this->setUpDatabase($this->app);
+
+        Factory::guessFactoryNamesUsing(function (string $modelName) {
+            return 'Jetcod\\LaravelSlugify\\Test\\Factories\\' . class_basename($modelName) . 'Factory';
+        });
     }
 
     public function tearDown(): void
